@@ -10,9 +10,10 @@ public class Answer
 {
     public int Id { get; set; }
     public Question Question { get; set; }
+    public SupportRequest? SupportRequest { get; set; }
+    public SupportProvision? SupportProvision { get; set; }
     public string? TextResponse { get; set; }
-
-    public AnswerOption AnswerOption { get; set; }
-    public bool OptionSelected { get; set; }
+    public AnswerOption? AnswerOption { get; set; }
+    public bool? OptionSelected { get; set; }
 
 }

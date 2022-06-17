@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace DynamicForms.Core.Enums;
 
-public enum QuestionType
+public enum AreaCoverageType
 {
-    SingleSelect = 0,
-    MultiSelect = 1,
-    Number = 2,
-    Text = 3,
+    Fixed = 0,
+    Coverage = 1,
 }
