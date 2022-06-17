@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DynamicForms.Core.Enums;
 
-public enum QuestionDisplayType
+public enum ResponseDisplayType
 {
     RB = 0,
     CB = 1,
