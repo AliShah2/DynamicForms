@@ -9,7 +9,7 @@ namespace DynamicForms.Core.Entities;
 public class AnswerOption
 {
     public int Id { get; set; }
-    public Question QuestionGroup { get; set; }
+    public Question Question { get; set; }
     public string OptionLabel { get; set; }
 
 }
