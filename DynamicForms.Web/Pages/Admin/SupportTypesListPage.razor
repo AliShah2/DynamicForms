@@ -1,0 +1,66 @@
+﻿@*@page "/admin/supporttypes"
+
+@if (_isLoading)
+{
+    <MudProgressLinear Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+}
+else
+{
+    <MudContainer>
+        <MudBreadcrumbs Class="ml-n3" Items="_breadcrumbs" Separator="@BreadcrumbConstants.Separator" />
+
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudText Typo="Typo.h4">Support Types</MudText>
+        </MudHidden>
+        <MudTable Items="_supportTypeDisplayModels"
+              Loading="@_isLoading"
+              LoadingProgressColor="Color.Info"
+              Filter="SearchTable"
+              Hover="true">
+            <ToolBarContent>
+                <MudHidden Breakpoint="Breakpoint.Xs">
+                    <MudText Typo="Typo.h4">Support Types</MudText>
+                    <MudSpacer />
+                </MudHidden>
+                <MudTextField @bind-Value="_searchString"
+                          Placeholder="Search"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium"
+                          Class="mt-0">
+                </MudTextField>
+                <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Filled.AddCircle"
+                       Class="px- mr-2"
+                       Disabled="!_loggedInUser.HasClaim(Admin.SupportTypesEdit)"
+                       OnClick="RedirectToCreatePage">
+                    Create
+                </MudButton>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Type</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Type">@context.Type</MudTd>
+                <MudTd>
+                    <MudGrid Justify="Justify.Center">
+                        <MudItem>
+                            <MudTooltip Text="Edit" Placement="Placement.Top">
+                                <MudFab Color="Color.Info"
+                                    Icon="@Icons.Material.Filled.Edit"
+                                    Size="Size.Small"
+                                    Disabled="@(!_loggedInUser.HasClaim(Admin.SupportTypesEdit) || context.Type is not (ListingSupportTypeName or ReferralSupportTypeName))"
+                                    OnClick="() => RedirectToEditPage(context.Id)">
+                                </MudFab>
+                            </MudTooltip>
+                        </MudItem>
+                    </MudGrid>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudContainer>
+}*@

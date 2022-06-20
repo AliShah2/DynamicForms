@@ -1,8 +1,12 @@
+using AutoMapper;
+using DynamicForms.Core.Dtos.MappingProfiles;
 using DynamicForms.Infrastructure.Data;
 using DynamicForms.Web.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(
                     .MigrationsAssembly("DynamicForms.Infrastructure"));
         }
 );
+
+builder.Services.AddMudServices();
+builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(SupportCaseTypeProfile)));
 
 var app = builder.Build();
 
