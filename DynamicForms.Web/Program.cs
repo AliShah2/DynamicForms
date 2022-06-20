@@ -1,6 +1,8 @@
 using AutoMapper;
 using DynamicForms.Core.Dtos.MappingProfiles;
 using DynamicForms.Infrastructure.Data;
+using DynamicForms.Services;
+using DynamicForms.Services.Interfaces;
 using DynamicForms.Web.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -26,6 +28,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 builder.Services.AddMudServices();
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(SupportCaseTypeProfile)));
+
+builder.Services.AddScoped<ISupportTypeService, SupportTypeService>();
 
 var app = builder.Build();
 

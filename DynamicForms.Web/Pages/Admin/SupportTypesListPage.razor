@@ -1,4 +1,5 @@
-﻿@*@page "/admin/supporttypes"
+﻿@page "/admin/support-types"
+@using DynamicForms.Web.Constants
 
 @if (_isLoading)
 {
@@ -12,7 +13,7 @@ else
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
             <MudText Typo="Typo.h4">Support Types</MudText>
         </MudHidden>
-        <MudTable Items="_supportTypeDisplayModels"
+        <MudTable Items="SupportTypes"
               Loading="@_isLoading"
               LoadingProgressColor="Color.Info"
               Filter="SearchTable"
@@ -32,8 +33,7 @@ else
                 <MudButton Variant="Variant.Filled"
                        Color="Color.Primary"
                        StartIcon="@Icons.Filled.AddCircle"
-                       Class="px- mr-2"
-                       Disabled="!_loggedInUser.HasClaim(Admin.SupportTypesEdit)"
+                       Class="px- mr-2"                       
                        OnClick="RedirectToCreatePage">
                     Create
                 </MudButton>
@@ -45,7 +45,8 @@ else
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd DataLabel="Type">@context.Type</MudTd>
+                <MudTd DataLabel="Type">@context.SupportCaseType.Name</MudTd>
+                <MudTd DataLabel="Type">@context.AreaCoverage.Name</MudTd>
                 <MudTd>
                     <MudGrid Justify="Justify.Center">
                         <MudItem>
@@ -53,7 +54,6 @@ else
                                 <MudFab Color="Color.Info"
                                     Icon="@Icons.Material.Filled.Edit"
                                     Size="Size.Small"
-                                    Disabled="@(!_loggedInUser.HasClaim(Admin.SupportTypesEdit) || context.Type is not (ListingSupportTypeName or ReferralSupportTypeName))"
                                     OnClick="() => RedirectToEditPage(context.Id)">
                                 </MudFab>
                             </MudTooltip>
@@ -63,4 +63,4 @@ else
             </RowTemplate>
         </MudTable>
     </MudContainer>
-}*@
+}

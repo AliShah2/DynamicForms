@@ -24,10 +24,10 @@ public static class ApplicationDbContextExtensions
         SeedSupportCategories(dbContext);
         dbContext.SaveChanges();
 
-        //TODO - implement these
-        //SeedSupportTypes(dbContext);
-        //dbContext.SaveChanges();
+        SeedSupportTypes(dbContext);
+        dbContext.SaveChanges();
 
+        //TODO - implement these
         //Questions(dbContext);
         //dbContext.SaveChanges();
 
@@ -63,7 +63,17 @@ public static class ApplicationDbContextExtensions
 
     private static void SeedSupportTypes(ApplicationDbContext dbContext)
     {
-        throw new NotImplementedException();
+        var supportTypes = new List<SupportType>
+        {
+            new SupportType{Name = "Emergency Food", 
+                            SupportCaseType = dbContext.SupportCaseTypes.FirstOrDefault(c => c.Name == SupportCaseTypeEnum.Matched.ToString()), 
+                            AreaCoverage = dbContext.AreaCoverages.FirstOrDefault(a => a.Name == AreaCoverageType.Fixed.ToString())},
+            new SupportType{Name = "Therapy",
+                            SupportCaseType = dbContext.SupportCaseTypes.FirstOrDefault(c => c.Name == SupportCaseTypeEnum.Listing.ToString()),
+                            AreaCoverage = dbContext.AreaCoverages.FirstOrDefault(a => a.Name == AreaCoverageType.Coverage.ToString())},
+        };
+
+        supportTypes.ForEach(item => dbContext.SupportTypes.AddIfNotExists(item, _ => _.Name == item.Name));
     }
 
     private static void SeedSupportCategories(ApplicationDbContext dbContext)
