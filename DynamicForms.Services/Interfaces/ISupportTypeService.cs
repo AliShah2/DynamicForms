@@ -10,4 +10,7 @@ namespace DynamicForms.Services.Interfaces;
 public interface ISupportTypeService
 {
     Task<List<SupportType>> GetAll();
+    Task<List<SupportCaseType>> GetAllSupportCasesTypes();
+    Task<List<AreaCoverage>> GetAllAreaCoverageTypes();
+    Task<List<QuestionType>> GetAllQuestionTypes();
 }

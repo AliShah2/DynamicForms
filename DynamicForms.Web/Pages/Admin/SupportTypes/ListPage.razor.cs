@@ -4,11 +4,11 @@ using DynamicForms.Web.Constants;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace DynamicForms.Web.Pages.Admin;
+namespace DynamicForms.Web.Pages.Admin.SupportTypes;
 
 
 
-public partial class SupportTypesListPage
+public partial class ListPage
 {
     [Inject] private ISupportTypeService _supportTypeService { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }

@@ -27,4 +27,22 @@ public class SupportTypeService : ISupportTypeService
                                         .ToListAsync();   
         return supportTypes;
     }
+
+    public async Task<List<AreaCoverage>> GetAllAreaCoverageTypes()
+    {
+        var areaCoverageTypes = await _context.AreaCoverages.ToListAsync();
+        return areaCoverageTypes;
+    }
+
+    public async Task<List<QuestionType>> GetAllQuestionTypes()
+    {
+        var questionTypes = await _context.QuestionTypes.ToListAsync();
+        return questionTypes;
+    }
+
+    public async Task<List<SupportCaseType>> GetAllSupportCasesTypes()
+    {
+        var supportCaseTypes = await _context.SupportCaseTypes.ToListAsync();
+        return supportCaseTypes;
+    }
 }
