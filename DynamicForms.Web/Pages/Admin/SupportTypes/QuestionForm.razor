@@ -73,25 +73,36 @@
 
 
                     @*** Question type (dropdown list of single-select, multi-select etc.)  *@
-                    <MudItem xs="10" sm="11">
+                    <MudItem xs="5" sm="6">
                         <MudField Variant="Variant.Text">
                             Type:
                         </MudField>
                     </MudItem>
-                    <MudItem xs="2" sm="1">
+                    <MudItem xs="2" sm="2">
                         <MudSelect T="QuestionType" @bind-Value="_model.QuestionType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Type">
-                            @foreach (QuestionType type in _questionTypes)
+                            @foreach (QuestionType questionType in _questionTypes)
                             {
                                 {
-                                    <MudSelectItem Value="@type">@type.Type</MudSelectItem>
+                                    <MudSelectItem Value="@questionType">@questionType.Type - @questionType.DisplayType</MudSelectItem>
                                 }
                             }
                         </MudSelect>
                     </MudItem>
 
-
-                    @*** Display type (RB, CB, Text etc.) *@
                     @*** Add options (only applicable in case of select options) *@
+                    @if (@_model.QuestionType != null && @_model.QuestionType.Type != ResponseType.Text && @_model.QuestionType.Type != ResponseType.Number)
+                    {
+                        @if (_addingOption)
+                        {
+                            <AddOptionForm QuestionType="_model.QuestionType"></AddOptionForm>
+                        }
+                        <MudItem xs="6" sm="2">
+                            <MudButton Color="Color.Primary" FullWidth="true" Variant="Variant.Filled" OnClick="AddOption">
+                                <MudText>Add Option</MudText>
+                            </MudButton>
+                        </MudItem>
+                    }
+
 
 
 

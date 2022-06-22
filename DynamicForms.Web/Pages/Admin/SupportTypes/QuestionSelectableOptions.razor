@@ -1,0 +1,48 @@
+﻿@using MudBlazor;
+@using DynamicForms.Web.Data
+
+<MudContainer>
+        @if (ChoiceType == "Checkbox")
+        {
+            <MudButton OnClick="AddNewCheckboxItem">Add Checkbox Item</MudButton>
+            
+            @foreach (var checkbox in Checkboxes)
+            {
+                <div class="inline">
+                    <MudCheckBox @bind-Checked="@checkbox.Toggled"></MudCheckBox>
+                    <MudTextField @bind-Value="@checkbox.Text" Label="Item text" Variant="@Variant.Outlined"></MudTextField>
+                </div>
+            }
+        }
+        else if (ChoiceType == "Radiobutton")
+        {
+        @*    <MudRadioGroup @bind-SelectedOption="RadioButtonTicked">
+                @foreach (var radioButton in RadioButtons)
+                {
+                    <MudRadio Option="@radioButton" Color="Color.Primary" Size="Size.Medium">Radio button @RadioButtons.Indexof(radioButton)<MudRadio>
+                    <!-- not sure this is best way to handle this, would have to increment this component every time parent component creates new radio button -->
+                }
+            </MudRadioGroup>*@
+        }
+</MudContainer>
+
+@code {
+    [Parameter]
+    public string ChoiceType { get; set; } // string for now, this would be a value representing  radio button / checkbox etc
+
+    public List<CheckboxItem> Checkboxes { get; set; } = new();
+
+    public List<string> RadioButtons { get; set; } = new();
+
+    public string Text { get; set; }
+
+    public void AddNewCheckboxItem()
+    {
+        Checkboxes.Add(new CheckboxItem());
+    }
+
+    public void AddNewRadiobuttonItem()
+    {
+        //RadioButtons.Add();
+    }
+}

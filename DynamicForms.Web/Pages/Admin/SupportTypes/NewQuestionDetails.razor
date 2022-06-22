@@ -1,0 +1,72 @@
+﻿@using DynamicForms.Core.Entities
+@using DynamicForms.Core.Enums
+@using DynamicForms.Services.Interfaces
+
+<div>
+    <MudContainer>
+        <MudTextField Label="Question title" @bind-Value="QuestionTitle"></MudTextField>
+        <MudTextField Label="Question Text" @bind-Value="QuestionText"></MudTextField>
+
+        <MudSelect T="StakeholderType" @bind-Value="Question.StakeholderType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter"  Label="Stakeholder Type">
+            @foreach (StakeholderType type in Enum.GetValues(typeof(StakeholderType)))
+            {
+                <MudSelectItem Value="@type">@type.ToString()</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudSelect T="QuestionType" @bind-Value="Question.QuestionType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Question Type">
+            @foreach (QuestionType questionType in _questionTypes)
+            {
+                <MudSelectItem Value="@questionType">@questionType.Type - @questionType.DisplayType</MudSelectItem>
+            }
+        </MudSelect>
+
+
+        <!-- update this to be shown when specific question type is selected rather than on button press -->
+        <MudButton OnClick="ShowSelectableItemComponent_TEMP">Show checkboxes</MudButton>
+        @if (ShowSelectableItemComponent_TEMP_VALUE)
+        {
+            <QuestionSelectableOptions ChoiceType="Checkbox"></QuestionSelectableOptions>
+        }
+    </MudContainer>
+
+    <!-- On Submit, create new and save -->
+    <!-- also need a button to remove this current scope question from list of parent component, adding to event handler can do this I think -->
+</div>
+
+@code {
+
+    [Inject] private ISupportTypeService _supportTypeService { get; set; }
+
+    [Parameter]
+    public Question Question { get; set; } // will be updated by properties below upon Save, if saved by parent component, should be passed by ref, or props below returned to parent somehow
+
+    public string QuestionTitle { get; set; }
+
+    public string QuestionText { get; set; }
+
+    List<string> StakeHolders = new() // temp, as we're not getting data from database yet
+        {
+            "Requester",
+            "Provider"
+        };
+
+    private List<QuestionType> _questionTypes = new List<QuestionType>();
+
+    public bool ShowSelectableItemComponent_TEMP_VALUE { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Question == null)
+        {
+            Question = new Question();
+        }
+
+        _questionTypes = await _supportTypeService.GetAllQuestionTypes();
+    }
+
+    public void ShowSelectableItemComponent_TEMP()
+    {
+        ShowSelectableItemComponent_TEMP_VALUE = !ShowSelectableItemComponent_TEMP_VALUE;
+    }
+}

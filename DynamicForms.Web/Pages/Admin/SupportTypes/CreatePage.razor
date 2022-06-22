@@ -58,7 +58,7 @@
                 </MudItem>
 
                 @*If a referral or matched support type, display button to add question*@
-                @if (_model.SupportCaseType != null && (_model.SupportCaseType.Name == SupportCaseTypeEnum.Referral.ToString() || _model.SupportCaseType.Name == SupportCaseTypeEnum.Matched.ToString()))
+@*                @if (_model.SupportCaseType != null && (_model.SupportCaseType.Name == SupportCaseTypeEnum.Referral.ToString() || _model.SupportCaseType.Name == SupportCaseTypeEnum.Matched.ToString()))
                 {
                     @if (_startNewQuestion)
                     {
@@ -70,6 +70,12 @@
                             <MudText>Add Question</MudText>
                         </MudButton>
                     </MudItem>
+                }*@
+
+                                @*If a referral or matched support type, display button to add question*@
+                @if (_model.SupportCaseType != null && (_model.SupportCaseType.Name == SupportCaseTypeEnum.Referral.ToString() || _model.SupportCaseType.Name == SupportCaseTypeEnum.Matched.ToString()))
+                {
+                    <SupportTypeQuestions></SupportTypeQuestions>
                 }
 
                 <MudGrid Class="py-6" Justify="Justify.FlexEnd">
