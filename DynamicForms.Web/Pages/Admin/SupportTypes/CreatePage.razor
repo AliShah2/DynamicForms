@@ -25,7 +25,7 @@
                     <MudTextField @bind-Value="_model.Name" For="@(() => _model.Name)" />
                 </MudItem>
                 <MudItem xs="12" sm="2">
-                    <MudSelect T="SupportCaseType" @bind-Value="_model.SupportCaseType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Case Type">
+                    <MudSelect T="SupportCaseType" @bind-Value="_model.SupportCaseType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Case Type" SelectedValuesChanged="AddQuestionHandler">
                         @foreach (SupportCaseType type in SupportCaseTypes)
                         {
                             <MudSelectItem Value="@type">@type.Name</MudSelectItem>
@@ -49,7 +49,7 @@
                     </MudItem>*@
 
                 <MudItem xs="12" sm="2">
-                    <MudSelect T="AreaCoverage" @bind-Value="_model.AreaCoverage" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter"  Label="Coverage Type">
+                    <MudSelect T="AreaCoverage" @bind-Value="_model.AreaCoverage" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Coverage Type">
                         @foreach (AreaCoverage type in AreaCoverageTypes)
                         {
                             <MudSelectItem Value="@type">@type.Name</MudSelectItem>
@@ -58,24 +58,39 @@
                 </MudItem>
 
                 @*If a referral or matched support type, display button to add question*@
-@*                @if (_model.SupportCaseType != null && (_model.SupportCaseType.Name == SupportCaseTypeEnum.Referral.ToString() || _model.SupportCaseType.Name == SupportCaseTypeEnum.Matched.ToString()))
-                {
+                @*                @if (_model.SupportCaseType != null && (_model.SupportCaseType.Name == SupportCaseTypeEnum.Referral.ToString() || _model.SupportCaseType.Name == SupportCaseTypeEnum.Matched.ToString()))
+                    {
                     @if (_startNewQuestion)
                     {
-                        <QuestionForm></QuestionForm>
+                    <QuestionForm></QuestionForm>
                     }
-                    
-                    <MudItem xs="6" sm="2">
-                        <MudButton Color="Color.Primary" FullWidth="true" Variant="Variant.Filled" OnClick="AddQuestion">
-                            <MudText>Add Question</MudText>
-                        </MudButton>
-                    </MudItem>
-                }*@
 
-                                @*If a referral or matched support type, display button to add question*@
-                @if (_model.SupportCaseType != null && (_model.SupportCaseType.Name == SupportCaseTypeEnum.Referral.ToString() || _model.SupportCaseType.Name == SupportCaseTypeEnum.Matched.ToString()))
+                    <MudItem xs="6" sm="2">
+                    <MudButton Color="Color.Primary" FullWidth="true" Variant="Variant.Filled" OnClick="AddQuestion">
+                    <MudText>Add Question</MudText>
+                    </MudButton>
+                    </MudItem>
+                    }*@
+
+                @if (_shouldHaveQuestions)
                 {
-                    <SupportTypeQuestions></SupportTypeQuestions>
+                    <MudText>Number of questions so far: @_model.Questions.Count</MudText>
+
+                    <MudGrid Class="py-6" Justify="Justify.FlexStart">
+                        <MudItem xs="12" sm="2">
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mt-6 mb-6" OnClick="AddQuestion">Add Question</MudButton>
+                        </MudItem>
+                    </MudGrid>
+
+                    <!-- every time Add Question is clicked, need to show another NewQuestionDetails component-->
+                    <MudGrid Justify="Justify.Center">
+                        @foreach (var question in _model.Questions)
+                        {
+                            <MudItem xs="12" sm="10">
+                                <NewQuestionDetails Question="@question" OnRemoveQuestionClicked="RemoveQuestion"></NewQuestionDetails>
+                            </MudItem>
+                        }
+                    </MudGrid>
                 }
 
                 <MudGrid Class="py-6" Justify="Justify.FlexEnd">

@@ -1,8 +1,9 @@
-﻿@using MudBlazor;
+﻿@using DynamicForms.Core.Entities
+@using MudBlazor;
 @using DynamicForms.Web.Data
 
 <MudContainer>
-        @if (ChoiceType == "Checkbox")
+        @if (QuestionType.DisplayType == Core.Enums.ResponseDisplayType.CB)
         {
             <MudButton OnClick="AddNewCheckboxItem">Add Checkbox Item</MudButton>
             
@@ -14,12 +15,12 @@
                 </div>
             }
         }
-        else if (ChoiceType == "Radiobutton")
+        @if(QuestionType.DisplayType == Core.Enums.ResponseDisplayType.RB)
         {
-        @*    <MudRadioGroup @bind-SelectedOption="RadioButtonTicked">
+@*            <MudRadioGroup @bind-SelectedOption="RadioButtonTicked">
                 @foreach (var radioButton in RadioButtons)
                 {
-                    <MudRadio Option="@radioButton" Color="Color.Primary" Size="Size.Medium">Radio button @RadioButtons.Indexof(radioButton)<MudRadio>
+                    <MudRadio Option="@radioButton" Color="Color.Primary" Size="Size.Medium">Radio button @RadioButtons.Indexof(radioButton)</MudRadio>
                     <!-- not sure this is best way to handle this, would have to increment this component every time parent component creates new radio button -->
                 }
             </MudRadioGroup>*@
@@ -27,14 +28,27 @@
 </MudContainer>
 
 @code {
+
     [Parameter]
-    public string ChoiceType { get; set; } // string for now, this would be a value representing  radio button / checkbox etc
+    public QuestionType QuestionType { get; set; }
+    [Parameter]
+    public List<AnswerOption> AnswerOptions { get; set; }
 
     public List<CheckboxItem> Checkboxes { get; set; } = new();
 
     public List<string> RadioButtons { get; set; } = new();
 
     public string Text { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var q = QuestionType;
+
+        if (QuestionType.DisplayType == Core.Enums.ResponseDisplayType.CB)
+        {
+            var s = "";
+        }
+    }
 
     public void AddNewCheckboxItem()
     {

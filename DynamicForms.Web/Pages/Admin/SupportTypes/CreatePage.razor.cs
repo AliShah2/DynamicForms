@@ -1,4 +1,5 @@
 ﻿using DynamicForms.Core.Entities;
+using DynamicForms.Core.Enums;
 using DynamicForms.Services.Interfaces;
 using DynamicForms.Web.Constants;
 using Microsoft.AspNetCore.Components;
@@ -18,6 +19,7 @@ public partial class CreatePage
     private bool _isLoading = true;
     private bool _isSaving = false;
     private bool _startNewQuestion = false;
+    private bool _shouldHaveQuestions = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -36,12 +38,34 @@ public partial class CreatePage
         _isLoading = false;
     }
 
+    public void AddQuestion()
+    {
+        _model.Questions.Add(new Question());
+    }
+
+    public void RemoveQuestion(Question question)
+    {
+        _model.Questions.Remove(question);
+    }
+
+    private async Task AddQuestionHandler()
+    {
+        if(_model.SupportCaseType == null)
+        {
+            return;
+        }
+        if (!(_model.SupportCaseType.Name == SupportCaseTypeEnum.Referral.ToString() || _model.SupportCaseType.Name == SupportCaseTypeEnum.Matched.ToString()))
+        {
+            return;
+        }
+
+        _shouldHaveQuestions = true;
+        _model.Questions = new List<Question>();
+    }
+
     private async Task OnValidSubmit()
     {
-        throw new NotImplementedException();
-    }
-    private async Task AddQuestion()
-    {
-        _startNewQuestion = true;
+        await _supportTypeService.CreateAsync(_model);
+        NavigationManager.NavigateTo("/admin/support-types");
     }
 }

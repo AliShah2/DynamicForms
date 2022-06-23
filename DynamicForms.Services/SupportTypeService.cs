@@ -19,12 +19,18 @@ public class SupportTypeService : ISupportTypeService
         _context = context;
     }
 
+    public async Task CreateAsync(SupportType supportType)
+    {
+        await _context.SupportTypes.AddAsync(supportType);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<List<SupportType>> GetAll()
     {
         var supportTypes = await _context.SupportTypes
-                                        .Include(s=>s.SupportCaseType)
-                                        .Include(s=>s.AreaCoverage)
-                                        .ToListAsync();   
+                                        .Include(s => s.SupportCaseType)
+                                        .Include(s => s.AreaCoverage)
+                                        .ToListAsync();
         return supportTypes;
     }
 

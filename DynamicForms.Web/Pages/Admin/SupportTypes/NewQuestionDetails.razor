@@ -2,32 +2,56 @@
 @using DynamicForms.Core.Enums
 @using DynamicForms.Services.Interfaces
 
-<div>
-    <MudContainer>
-        <MudTextField Label="Question title" @bind-Value="QuestionTitle"></MudTextField>
-        <MudTextField Label="Question Text" @bind-Value="QuestionText"></MudTextField>
+<div style="border: 1px solid">
+    <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-5">
 
-        <MudSelect T="StakeholderType" @bind-Value="Question.StakeholderType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter"  Label="Stakeholder Type">
-            @foreach (StakeholderType type in Enum.GetValues(typeof(StakeholderType)))
+
+        <MudTextField Label="Question title" @bind-Value="Question.Title"></MudTextField>
+        <MudTextField Label="Question Text" @bind-Value="Question.Text"></MudTextField>
+
+        <MudSelect T="StakeholderType" @bind-Value="Question.StakeholderType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Stakeholder Type">
+            @foreach (StakeholderType item in Enum.GetValues(typeof(StakeholderType)))
             {
-                <MudSelectItem Value="@type">@type.ToString()</MudSelectItem>
+                <MudSelectItem Value="@item" />
             }
         </MudSelect>
 
-        <MudSelect T="QuestionType" @bind-Value="Question.QuestionType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Question Type">
-            @foreach (QuestionType questionType in _questionTypes)
+        <MudSelect T="QuestionType" @bind-Value="Question.QuestionType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Question Type" SelectedValuesChanged="AddAnswerOptionsHandler">
+            @foreach (QuestionType questionType in _availableQuestionTypes)
             {
                 <MudSelectItem Value="@questionType">@questionType.Type - @questionType.DisplayType</MudSelectItem>
             }
         </MudSelect>
 
 
-        <!-- update this to be shown when specific question type is selected rather than on button press -->
-        <MudButton OnClick="ShowSelectableItemComponent_TEMP">Show checkboxes</MudButton>
-        @if (ShowSelectableItemComponent_TEMP_VALUE)
+        @if (_shouldHaveAnswerOptions)
         {
-            <QuestionSelectableOptions ChoiceType="Checkbox"></QuestionSelectableOptions>
+            <MudText>Number of options so far: @Question.AnswerOptions.Count</MudText>
+
+            <div style="border: 1px solid">
+            <MudGrid Class="py-6" Justify="Justify.FlexStart">
+                <MudItem xs="12" sm="2">
+                    <MudButton StartIcon="@Icons.Material.Filled.Add" OnClick="AddAnswerOption">Add Option</MudButton>
+                </MudItem>
+            </MudGrid>
+            </div>
+
+            <MudGrid Justify="Justify.Center">
+                @foreach (var option in Question.AnswerOptions)
+                {
+                    <MudItem xs="12" sm="10">
+                        <AddAnswerOption QuestionType="@Question.QuestionType" AnswerOption="@option" OnRemoveOptionClicked="RemoveAnswerOption"></AddAnswerOption>
+                    </MudItem>
+                }
+            </MudGrid>
         }
+
+        <MudGrid Class="py-6" Justify="Justify.FlexEnd">
+            <MudItem xs="12" sm="2">
+                <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Remove" Color="Color.Warning" Class="mt-6 mb-6" OnClick="(args)=>RemoveThisQuestion(args, Question)">Remove</MudButton>
+            </MudItem>
+        </MudGrid>
+
     </MudContainer>
 
     <!-- On Submit, create new and save -->
@@ -38,22 +62,12 @@
 
     [Inject] private ISupportTypeService _supportTypeService { get; set; }
 
-    [Parameter]
-    public Question Question { get; set; } // will be updated by properties below upon Save, if saved by parent component, should be passed by ref, or props below returned to parent somehow
+    [Parameter] public Question Question { get; set; }
+    [Parameter] public EventCallback<Question> OnRemoveQuestionClicked { get; set; }
 
-    public string QuestionTitle { get; set; }
-
-    public string QuestionText { get; set; }
-
-    List<string> StakeHolders = new() // temp, as we're not getting data from database yet
-        {
-            "Requester",
-            "Provider"
-        };
-
-    private List<QuestionType> _questionTypes = new List<QuestionType>();
-
+    private List<QuestionType> _availableQuestionTypes = new List<QuestionType>();
     public bool ShowSelectableItemComponent_TEMP_VALUE { get; set; }
+    private bool _shouldHaveAnswerOptions = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,12 +75,44 @@
         {
             Question = new Question();
         }
-
-        _questionTypes = await _supportTypeService.GetAllQuestionTypes();
+        _availableQuestionTypes = await _supportTypeService.GetAllQuestionTypes();
     }
 
     public void ShowSelectableItemComponent_TEMP()
     {
         ShowSelectableItemComponent_TEMP_VALUE = !ShowSelectableItemComponent_TEMP_VALUE;
     }
+
+    private async Task AddAnswerOptionsHandler()
+    {
+        //if type is right, add answer options list to question and set the flag
+        if (Question.QuestionType == null)
+        {
+            return;
+        }
+        if (Question.QuestionType.Type == ResponseType.Text || Question.QuestionType.Type == ResponseType.Number)
+        {
+            return;
+        }
+
+        Question.AnswerOptions = new List<AnswerOption>();
+        _shouldHaveAnswerOptions = true;
+
+    }
+
+    public void AddAnswerOption()
+    {
+        Question.AnswerOptions.Add(new AnswerOption());
+    }
+
+    public void RemoveAnswerOption(AnswerOption answerOption)
+    {
+        Question.AnswerOptions.Remove(answerOption);
+    }
+
+    private async Task RemoveThisQuestion(MouseEventArgs e, Question question)
+    {
+        await OnRemoveQuestionClicked.InvokeAsync(question);
+    }
+
 }

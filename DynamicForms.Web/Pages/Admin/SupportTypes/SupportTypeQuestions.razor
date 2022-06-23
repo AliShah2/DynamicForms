@@ -1,33 +1,57 @@
 ﻿@using DynamicForms.Core.Entities
 
-<MudContainer>
-    <h3>Support Type Questions</h3>
-    <!-- need a button for 'Add Question' -->
 
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddQuestion">Add Question</MudButton>
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <div style="border: 1px solid">
 
-    <!-- every time Add Question is clicked, need to show another NewQuestionDetails component-->
-    @foreach (var question in NewQuestions)
-    {
-        <!-- need to pass down a DTO by reference so that it can be updated by the component itself? -->
-        <div>
-            
-            <!-- add a callback function to remove the newquestiondetails component from the list? -->
+        @*<MudText Class="my-4" Typo="Typo.h5">Questions</MudText>*@
+
+
+        <!-- need a button for 'Add Question' -->
+
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mt-6 mb-6" OnClick="AddQuestion">Add Question</MudButton>
+
+        <!-- every time Add Question is clicked, need to show another NewQuestionDetails component-->
+        @foreach (var question in Questions)
+        {
+            <!-- need to pass down a DTO by reference so that it can be updated by the component itself? -->
+            <div Class="mb-6">
+                <!-- add a callback function to remove the newquestiondetails component from the list? -->
             <NewQuestionDetails Question="@question"></NewQuestionDetails>
-        </div>
-    }
+                <MudText>@question.Title</MudText>
+            </div>
+        }
+
+
+    </div>
 </MudContainer>
 
+
 @code {
-    public List<Question> NewQuestions { get; set; } = new();
+
+    [Parameter]
+    public List<Question> Questions { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        string result = "";
+        if (Questions == null)
+        {
+            result = "null";
+        }
+        else
+        {
+            result = "not null";
+        }
+    }
 
     public void AddQuestion()
     {
-        NewQuestions.Add(new Question());
+        Questions.Add(new Question());
     }
 
     public void RemoveQuestion(Question question)
     {
-        NewQuestions.Remove(question);
+        Questions.Remove(question);
     }
 }

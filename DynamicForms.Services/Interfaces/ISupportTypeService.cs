@@ -13,4 +13,5 @@ public interface ISupportTypeService
     Task<List<SupportCaseType>> GetAllSupportCasesTypes();
     Task<List<AreaCoverage>> GetAllAreaCoverageTypes();
     Task<List<QuestionType>> GetAllQuestionTypes();
+    Task CreateAsync(SupportType supportType);
 }
