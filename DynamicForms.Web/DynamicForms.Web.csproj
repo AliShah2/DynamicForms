@@ -24,4 +24,8 @@
     <ProjectReference Include="..\DynamicForms.Services\DynamicForms.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Citizen\SupportRequests\" />
+  </ItemGroup>
+
 </Project>
