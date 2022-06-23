@@ -1,0 +1,39 @@
+﻿@using DynamicForms.Core.Entities
+
+<div style="border: 1px solid">
+    <MudContainer MaxWidth="MaxWidth.Small" Class="pa-5">
+
+        <MudGrid>
+            <MudItem xs="12" sm="10">
+                <MudPaper Class="pa-4">
+                    <MudGrid>
+                        <MudItem xs="12" sm="7">
+                            <MudTextField Label="Option label" @bind-Value="AnswerOption.OptionLabel"></MudTextField>
+                        </MudItem>
+                        @*                    <MudGrid Class="py-6" Justify="Justify.FlexEnd">
+                            <MudItem xs="12" sm="2">
+                            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Remove" Color="Color.Warning" Class="mt-6 mb-6" OnClick="(args)=>RemoveThisOption(args, AnswerOption)">Remove</MudButton>
+                            </MudItem>
+                            </MudGrid>*@
+                        <MudItem xs="12" sm="5">
+                            <MudButton Justify="Justify.FlexEnd" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Remove" Color="Color.Warning" Class="mt-6 mb-6" OnClick="(args)=>RemoveThisOption(args, AnswerOption)">Remove</MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+    </MudContainer>
+
+</div>
+
+@code {
+    [Parameter] public QuestionType QuestionType { get; set; }
+    [Parameter] public AnswerOption AnswerOption { get; set; }
+    [Parameter] public EventCallback<AnswerOption> OnRemoveOptionClicked { get; set; }
+
+    private async Task RemoveThisOption(MouseEventArgs e, AnswerOption option)
+    {
+        await OnRemoveOptionClicked.InvokeAsync(option);
+    }
+}

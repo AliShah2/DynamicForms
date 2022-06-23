@@ -1,0 +1,57 @@
+﻿@using DynamicForms.Core.Entities
+
+
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <div style="border: 1px solid">
+
+        @*<MudText Class="my-4" Typo="Typo.h5">Questions</MudText>*@
+
+
+        <!-- need a button for 'Add Question' -->
+
+        <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="mt-6 mb-6" OnClick="AddQuestion">Add Question</MudButton>
+
+        <!-- every time Add Question is clicked, need to show another NewQuestionDetails component-->
+        @foreach (var question in Questions)
+        {
+            <!-- need to pass down a DTO by reference so that it can be updated by the component itself? -->
+            <div Class="mb-6">
+                <!-- add a callback function to remove the newquestiondetails component from the list? -->
+            <NewQuestionDetails Question="@question"></NewQuestionDetails>
+                <MudText>@question.Title</MudText>
+            </div>
+        }
+
+
+    </div>
+</MudContainer>
+
+
+@code {
+
+    [Parameter]
+    public List<Question> Questions { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        string result = "";
+        if (Questions == null)
+        {
+            result = "null";
+        }
+        else
+        {
+            result = "not null";
+        }
+    }
+
+    public void AddQuestion()
+    {
+        Questions.Add(new Question());
+    }
+
+    public void RemoveQuestion(Question question)
+    {
+        Questions.Remove(question);
+    }
+}

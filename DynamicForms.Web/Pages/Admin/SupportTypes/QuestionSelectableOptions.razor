@@ -1,0 +1,62 @@
+﻿@using DynamicForms.Core.Entities
+@using MudBlazor;
+@using DynamicForms.Web.Data
+
+<MudContainer>
+        @if (QuestionType.DisplayType == Core.Enums.ResponseDisplayType.CB)
+        {
+            <MudButton OnClick="AddNewCheckboxItem">Add Checkbox Item</MudButton>
+            
+            @foreach (var checkbox in Checkboxes)
+            {
+                <div class="inline">
+                    <MudCheckBox @bind-Checked="@checkbox.Toggled"></MudCheckBox>
+                    <MudTextField @bind-Value="@checkbox.Text" Label="Item text" Variant="@Variant.Outlined"></MudTextField>
+                </div>
+            }
+        }
+        @if(QuestionType.DisplayType == Core.Enums.ResponseDisplayType.RB)
+        {
+@*            <MudRadioGroup @bind-SelectedOption="RadioButtonTicked">
+                @foreach (var radioButton in RadioButtons)
+                {
+                    <MudRadio Option="@radioButton" Color="Color.Primary" Size="Size.Medium">Radio button @RadioButtons.Indexof(radioButton)</MudRadio>
+                    <!-- not sure this is best way to handle this, would have to increment this component every time parent component creates new radio button -->
+                }
+            </MudRadioGroup>*@
+        }
+</MudContainer>
+
+@code {
+
+    [Parameter]
+    public QuestionType QuestionType { get; set; }
+    [Parameter]
+    public List<AnswerOption> AnswerOptions { get; set; }
+
+    public List<CheckboxItem> Checkboxes { get; set; } = new();
+
+    public List<string> RadioButtons { get; set; } = new();
+
+    public string Text { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var q = QuestionType;
+
+        if (QuestionType.DisplayType == Core.Enums.ResponseDisplayType.CB)
+        {
+            var s = "";
+        }
+    }
+
+    public void AddNewCheckboxItem()
+    {
+        Checkboxes.Add(new CheckboxItem());
+    }
+
+    public void AddNewRadiobuttonItem()
+    {
+        //RadioButtons.Add();
+    }
+}

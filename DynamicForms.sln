@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicForms.Core", "Dynami
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicForms.Infrastructure", "DynamicForms.Infrastructure\DynamicForms.Infrastructure.csproj", "{8C9A5623-5623-4FC1-AE20-4152BF73AEEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicForms.Services", "DynamicForms.Services\DynamicForms.Services.csproj", "{8F9F6D94-C20D-4B69-9F7E-36B06129C073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicForms.Services", "DynamicForms.Services\DynamicForms.Services.csproj", "{8F9F6D94-C20D-4B69-9F7E-36B06129C073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

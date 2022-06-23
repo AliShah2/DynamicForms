@@ -1,0 +1,120 @@
+﻿@using DynamicForms.Core.Entities
+@using DynamicForms.Core.Enums
+
+<div style="border: 1px solid">
+    <MudExpansionPanel IsExpanded="true">
+        <TitleContent>
+            <MudText><strong>Add New Question Details:</strong></MudText>
+        </TitleContent>
+
+        <ChildContent>
+            <EditForm Model="_model">
+                <MudGrid Spacing="1">
+
+                    @*** TITLE *@
+                    <MudItem xs="10" sm="11">
+                        <MudField Variant="Variant.Text">
+                            <MudGrid Spacing="0" Justify="Justify.SpaceBetween">
+                                <MudItem>
+                                    Question Title:
+                                </MudItem>
+                                <MudItem>
+                                    <MudTooltip Placement="Placement.End" Text="This is not mandatory">
+                                        <MudIcon Icon="@Icons.Material.Filled.Info" />
+                                    </MudTooltip>
+                                </MudItem>
+                            </MudGrid>
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="9">
+                        <MudTextField @bind-Value="_model.Title"
+                                      Variant="Variant.Outlined"
+                                      Lines="3" />
+                    </MudItem>
+
+
+                    @*** Question text *@
+                    <MudItem xs="10" sm="11">
+                        <MudField Variant="Variant.Text">
+                            <MudGrid Spacing="0" Justify="Justify.SpaceBetween">
+                                <MudItem>
+                                    Question Text:
+                                </MudItem>
+                                <MudItem>
+                                    <MudTooltip Placement="Placement.End" Text="This is mandatory">
+                                        <MudIcon Icon="@Icons.Material.Filled.Info" />
+                                    </MudTooltip>
+                                </MudItem>
+                            </MudGrid>
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="12" sm="9">
+                        <MudTextField @bind-Value="_model.Text"
+                                      Variant="Variant.Outlined"
+                                      Lines="3" />
+                    </MudItem>
+
+                    @*** Requester / provider *@
+                    <MudItem xs="10" sm="11">
+                        <MudField Variant="Variant.Text">
+                            Question is for requester or provider?
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="2" sm="1">
+                        <MudSelect T="StakeholderType" @bind-Value="_model.StakeholderType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+                            @foreach (StakeholderType type in Enum.GetValues(typeof(StakeholderType)))
+                            {
+                                {
+                                    <MudSelectItem Value="@type">@type.ToString()</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+
+                    @*** Question type (dropdown list of single-select, multi-select etc.)  *@
+                    <MudItem xs="5" sm="6">
+                        <MudField Variant="Variant.Text">
+                            Type:
+                        </MudField>
+                    </MudItem>
+                    <MudItem xs="2" sm="2">
+                        <MudSelect T="QuestionType" @bind-Value="_model.QuestionType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Type">
+                            @foreach (QuestionType questionType in _questionTypes)
+                            {
+                                {
+                                    <MudSelectItem Value="@questionType">@questionType.Type - @questionType.DisplayType</MudSelectItem>
+                                }
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    @*** Add options (only applicable in case of select options) *@
+                    @if (@_model.QuestionType != null && @_model.QuestionType.Type != ResponseType.Text && @_model.QuestionType.Type != ResponseType.Number)
+                    {
+                        @if (_addingOption)
+                        {
+                            <AddOptionForm QuestionType="_model.QuestionType"></AddOptionForm>
+                        }
+                        <MudItem xs="6" sm="2">
+                            <MudButton Color="Color.Primary" FullWidth="true" Variant="Variant.Filled" OnClick="AddOption">
+                                <MudText>Add Option</MudText>
+                            </MudButton>
+                        </MudItem>
+                    }
+
+
+
+
+
+
+
+
+
+
+                </MudGrid>
+            </EditForm>
+        </ChildContent>
+
+    </MudExpansionPanel>
+</div>

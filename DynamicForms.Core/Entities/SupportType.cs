@@ -12,4 +12,5 @@ public class SupportType
     public string Name { get; set; }
     public SupportCaseType SupportCaseType { get; set; }
     public AreaCoverage AreaCoverage { get; set; }
+    public ICollection<Question>? Questions { get; set; }
 }

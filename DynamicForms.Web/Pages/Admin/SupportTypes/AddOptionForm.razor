@@ -1,0 +1,31 @@
+﻿@using DynamicForms.Core.Entities
+
+<div style="border: 1px solid">
+    <EditForm Model="AnswerOption">
+        <MudGrid Spacing="1">
+            <MudItem xs="10" sm="11">
+                <MudField Variant="Variant.Text">
+                    Option Label:
+                </MudField>
+            </MudItem>
+            <MudItem xs="12" sm="9">
+                <MudTextField @bind-Value="AnswerOption.OptionLabel"
+                                Variant="Variant.Outlined"
+                                Lines="1" />
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+    @AnswerOption.OptionLabel
+</div>
+
+@code{
+    [Parameter] public QuestionType QuestionType { get; set; }
+
+    public AnswerOption AnswerOption { get; set; } = new AnswerOption();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+}
