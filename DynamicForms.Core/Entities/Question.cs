@@ -16,4 +16,5 @@ public class Question
     public string? Title { get; set; }
     public string Text { get; set; }
     public ICollection<AnswerOption>? AnswerOptions { get; set; }
+    public ICollection<Answer>? Answers { get; set; }
 }

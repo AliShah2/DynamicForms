@@ -1,0 +1,90 @@
+﻿@page "/citizen/support-requests/create"
+
+@using DynamicForms.Core.Entities
+@using DynamicForms.Core.Enums
+@using DynamicForms.Web.Constants
+
+<MudContainer Class="pb-10">
+    @if (_isLoading)
+    {
+        <MudProgressLinear Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+    }
+    else
+    {
+        <MudBreadcrumbs Class="ml-n3" Items="_breadcrumbs" Separator="@BreadcrumbConstants.Separator" />
+
+        <MudText Class="my-4" Typo="Typo.h4">Create Support Request</MudText>
+
+        <EditForm Model="_model" OnValidSubmit="OnValidSubmit">
+            @*<FluentValidationValidator />*@
+            <MudGrid Justify="Justify.FlexStart">
+                <MudItem xs="12" sm="2">
+                    <MudField Variant="Variant.Text">Reference Number</MudField>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField @bind-Value="_model.ReferenceNumber" For="@(() => _model.ReferenceNumber)" />
+                </MudItem>
+                <MudItem xs="12" sm="2">
+                    <MudSelect T="SupportType" @bind-Value="_model.SupportType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Support Type">
+                        @foreach (SupportType supportType in SupportTypes)
+                        {
+                            <MudSelectItem Value="@supportType">@supportType.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <!-- Display questions -->
+                @if (_model.SupportType != null)
+                {
+                    @if (_model.SupportType.Questions != null && _model.SupportType.Questions.Count > 0)
+                    {
+
+                        @foreach (Question question in _model.SupportType.Questions)
+                        {
+                            <MudItem xs="12" sm="12">
+                                <MudField Variant="Variant.Text">@question.Text</MudField>
+                            </MudItem>
+
+                            @if (question.QuestionType.DisplayType == ResponseDisplayType.Text)
+                            {
+                                <MudItem xs="12" sm="12">
+                                    <MudTextField @bind-Value="_model.Answers." For="@(() => _model.ReferenceNumber)" />
+                                </MudItem>
+                            }
+
+                            @*                    <MudItem xs="12" sm="12">
+                                <MudSelect T="SupportType" @bind-Value="_model.SupportType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Support Type">
+                                @foreach (SupportType supportType in SupportTypes)
+                                {
+                                <MudSelectItem Value="@supportType">@supportType.Name</MudSelectItem>
+                                }
+                                </MudSelect>
+                                </MudItem>*@
+                        }
+                    }
+                }
+
+
+                <!-- create/cancel buttons -->
+            <MudGrid Class="py-6" Justify="Justify.FlexEnd">
+                    <MudItem xs="6" sm="2">
+                        <MudButton Link="/citizen/support-requests/" Variant="Variant.Filled" FullWidth="true" Color="Color.Default">Cancel</MudButton>
+                    </MudItem>
+                    <MudItem xs="6" sm="2">
+                        <MudButton ButtonType="ButtonType.Submit" Disabled="@_isSaving" Color="Color.Primary" FullWidth="true" Variant="Variant.Filled">
+                            @if (_isSaving)
+                            {
+                                <MudProgressCircular Class="ms-n4" Size="Size.Small" Indeterminate="true" />
+                                <MudText Class="ms-2">Create</MudText>
+                            }
+                            else
+                            {
+                                <MudText>Create</MudText>
+                            }
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudGrid>
+        </EditForm>
+    }
+</MudContainer>
