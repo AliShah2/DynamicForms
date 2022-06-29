@@ -93,10 +93,13 @@
 @code {
     [Parameter] public Question Question { get; set; }
     [Parameter] public SupportRequest SupportRequest { get; set; }
+    [Parameter] public SupportProvision SupportProvision { get; set; }
     [Parameter] public bool ViewMode { get; set; }
 
     private Answer Answer { get; set; }
     private AnswerOption _selectedOption;
+
+    private bool _isForSupportProvision;
 
     private bool _isTypeSingleSelect;
     private bool _isTypeMultiSelect;
@@ -110,6 +113,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (SupportProvision != null)
+        {
+            _isForSupportProvision = true;
+        }
+
         switch (Question.QuestionType.Type)
         {
             case ResponseType.SingleSelect:
@@ -144,7 +152,15 @@
 
         if(ViewMode)
         {
-            Answer = SupportRequest.Answers.FirstOrDefault(a => a.Question.Id == Question.Id);
+            if (_isForSupportProvision)
+            {
+                Answer = SupportProvision.Answers.FirstOrDefault(a => a.Question.Id == Question.Id);
+            }
+            else
+            {
+                Answer = SupportRequest.Answers.FirstOrDefault(a => a.Question.Id == Question.Id);
+            }
+
             _selectedOption = Answer.AnswerOptionSelected;
         }
         else
@@ -182,12 +198,21 @@
         _selectedOption = option;
         SaveSelectedOption();
     }
-    
+
     private void SaveSelectedOption()
     {
-        SupportRequest.Answers?.Remove(Answer);
         Answer.AnswerOptionSelected = _selectedOption;
-        SupportRequest.Answers?.Add(Answer);
+
+        if (_isForSupportProvision)
+        {
+            SupportProvision.Answers?.Remove(Answer);    
+            SupportProvision.Answers?.Add(Answer);
+        }
+        else
+        {
+            SupportRequest.Answers?.Remove(Answer);    
+            SupportRequest.Answers?.Add(Answer);
+        }
     }
     ////MouseEventArgs e,
     //private void OnCheckedChange( AnswerOption selectedOption)

@@ -1,4 +1,4 @@
-﻿@page "/citizen/support-requests/create"
+﻿@page "/organisation/support-provisions/{SupportProvisionId:int}/details"
 
 @using DynamicForms.Core.Entities
 @using DynamicForms.Core.Enums
@@ -13,7 +13,7 @@
     {
         <MudBreadcrumbs Class="ml-n3" Items="_breadcrumbs" Separator="@BreadcrumbConstants.Separator" />
 
-        <MudText Class="my-4" Typo="Typo.h4">Create Support Request</MudText>
+        <MudText Class="my-4" Typo="Typo.h4">Support Provision Details</MudText>
 
         <EditForm Model="_model" OnValidSubmit="OnValidSubmit">
             @*<FluentValidationValidator />*@
@@ -22,10 +22,10 @@
                     <MudField Variant="Variant.Text">Reference Number</MudField>
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudTextField @bind-Value="_model.ReferenceNumber" For="@(() => _model.ReferenceNumber)" />
+                    <MudTextField Disabled="!_editMode" @bind-Value="_model.ReferenceNumber" For="@(() => _model.ReferenceNumber)" />
                 </MudItem>
                 <MudItem xs="12" sm="2">
-                    <MudSelect T="SupportType" @bind-Value="_model.SupportType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Support Type">
+                    <MudSelect Disabled="!_editMode" T="SupportType" @bind-Value="_model.SupportType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Support Type">
                         @foreach (SupportType supportType in SupportTypes)
                         {
                             <MudSelectItem Value="@supportType">@supportType.Name</MudSelectItem>
@@ -41,12 +41,31 @@
 
                         @foreach (Question question in _model.SupportType.Questions)
                         {
-                            @if (question.StakeholderType == StakeholderType.Requester)
+
+                            @if (question.StakeholderType == StakeholderType.Provider)
                             {
                                 <MudItem xs="12" md="12">
-                                    <QuestionForm SupportRequest="_model" Question=question ViewMode="false"></QuestionForm>
+                                    <QuestionForm SupportProvision="_model" Question=question ViewMode="true"></QuestionForm>
                                 </MudItem>
                             }
+
+                            <!--*****************-->
+
+                       @*     @if (question.QuestionType.DisplayType == ResponseDisplayType.Text)
+                            {
+                                <MudItem xs="12" sm="12">
+                                    <MudTextField @bind-Value="_model.Answers.TextResponse" For="@(() => _model.ReferenceNumber)" />
+                                </MudItem>
+                            }*@
+
+                            @*                    <MudItem xs="12" sm="12">
+                                <MudSelect T="SupportType" @bind-Value="_model.SupportType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Support Type">
+                                @foreach (SupportType supportType in SupportTypes)
+                                {
+                                <MudSelectItem Value="@supportType">@supportType.Name</MudSelectItem>
+                                }
+                                </MudSelect>
+                                </MudItem>*@
                         }
                     }
                 }
