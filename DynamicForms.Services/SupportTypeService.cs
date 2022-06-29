@@ -30,6 +30,9 @@ public class SupportTypeService : ISupportTypeService
         var supportTypes = await _context.SupportTypes
                                         .Include(s => s.SupportCaseType)
                                         .Include(s => s.AreaCoverage)
+                                        .Include(s=>s.Questions)
+                                        .Include(s => s.Questions).ThenInclude(q=>q.QuestionType)
+                                        .Include(s => s.Questions).ThenInclude(q => q.AnswerOptions)
                                         .ToListAsync();
         return supportTypes;
     }

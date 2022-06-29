@@ -1,0 +1,170 @@
+﻿@using DynamicForms.Core.Entities
+@using Core.Enums
+
+<MudPaper Class="pa-4" Elevation="2">
+    <MudText Typo="Typo.h6">@Question.Title</MudText>
+    <MudText Typo="Typo.subtitle1">@Question.Text</MudText>
+
+    @if (_isTypeText)
+    {
+        @if (_isDisplayTypeText)
+        {
+            <MudTextField @bind-Value="Answer.TextResponse" Variant="Variant.Outlined"></MudTextField>
+        }
+    }
+
+    @if (_isTypeSingleSelect)
+    {
+        @if (_isDisplayTypeRadio)
+        {
+            <MudRadioGroup T="AnswerOption" SelectedOptionChanged="OnSelectOption">
+                @foreach (var option in Question.AnswerOptions)
+                {
+                    <MudRadio Option="@option" Color="Color.Primary">@option.OptionLabel</MudRadio>
+                }
+            </MudRadioGroup>
+        }
+
+        @if (_isDisplayTypeDropdown)
+        {
+            <MudSelect T="AnswerOption" ValueChanged="OnSelectOption" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Select option" >
+                @foreach (AnswerOption option in Question.AnswerOptions)
+                {
+                    <MudSelectItem Value="option">@option.OptionLabel</MudSelectItem>
+                }
+            </MudSelect>
+        }
+    }
+
+@*    @if (_isTypeMultiSelect)
+    {
+        @if (_isDisplayTypeCheckbox)
+        {
+            @foreach (var option in Question.AnswerOptions)
+            {
+                <MudCheckBox T="AnswerOption" @bind-Checked="option" Color="Color.Primary" Label="@option.OptionLabel" CheckedChanged="(option)=>OnCheckedChange(option)"></MudCheckBox>
+            }
+        }
+
+        @if (_isDisplayTypeDropdown)
+        {
+            <MudSelect T="AnswerOption" ValueChanged="OnSelectOption" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Select option" >
+                @foreach (AnswerOption option in Question.AnswerOptions)
+                {
+                    <MudSelectItem Value="option">@option.OptionLabel</MudSelectItem>
+                }
+            </MudSelect>
+        }
+    }*@
+
+
+
+
+    @* <MudSelect Label="Color" Dense="true" Margin="Margin.Dense" @bind-Value="DotColor" Class="mt-4">
+        <MudSelectItem T="Color" Value="Color.Default">Default</MudSelectItem>
+        <MudSelectItem T="Color" Value="Color.Primary">Primary</MudSelectItem>
+        <MudSelectItem T="Color" Value="Color.Secondary">Secondary</MudSelectItem>
+        <MudSelectItem T="Color" Value="Color.Tertiary">Tertiary</MudSelectItem>
+        <MudSelectItem T="Color" Value="Color.Info">Info</MudSelectItem>
+        <MudSelectItem T="Color" Value="Color.Success">Success</MudSelectItem>
+        <MudSelectItem T="Color" Value="Color.Warning">Warning</MudSelectItem>
+        <MudSelectItem T="Color" Value="Color.Error">Error</MudSelectItem>
+        <MudSelectItem T="Color" Value="Color.Dark">Dark</MudSelectItem>
+        </MudSelect>
+        <MudSelect Label="Size" Dense="true" Margin="Margin.Dense" @bind-Value="DotSize" Class="mt-4">
+        <MudSelectItem T="Size" Value="Size.Small">Small</MudSelectItem>
+        <MudSelectItem T="Size" Value="Size.Medium">Medium</MudSelectItem>
+        <MudSelectItem T="Size" Value="Size.Large">Large</MudSelectItem>
+        </MudSelect>
+        <MudSelect Label="Variant" Dense="true" Margin="Margin.Dense" @bind-Value="DotVariant" Class="mt-4">
+        <MudSelectItem T="Variant" Value="Variant.Outlined">Outlined</MudSelectItem>
+        <MudSelectItem T="Variant" Value="Variant.Filled">Filled</MudSelectItem>
+        </MudSelect>
+        <MudSlider @bind-Value="@DotElevation" Step="1" Min="0" Max="25" Class="mt-2">Dot Elevation</MudSlider>*@
+    @*<MudRadioGroup T="int" SelectedOptionChanged="">*@
+    @*    <MudRadioGroup T="int">
+        <MudRadio Option="0" Color="Color.Primary">Default</MudRadio>
+        <MudRadio Option="1" Color="Color.Secondary">Icon</MudRadio>
+        <MudRadio Option="2" Color="Color.Tertiary">Avatar</MudRadio>
+        <MudRadio Option="3" Color="Color.Default">Hide</MudRadio>
+        </MudRadioGroup>*@
+</MudPaper>
+
+@code {
+    [Parameter] public Question Question { get; set; }
+    [Parameter] public SupportRequest SupportRequest { get; set; }
+
+    public Answer Answer { get; set; }
+    private AnswerOption _selectedOption;
+
+    private bool _isTypeSingleSelect;
+    private bool _isTypeMultiSelect;
+    private bool _isTypeNumber;
+    private bool _isTypeText;
+
+    private bool _isDisplayTypeRadio;
+    private bool _isDisplayTypeCheckbox;
+    private bool _isDisplayTypeText;
+    private bool _isDisplayTypeDropdown;
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch (Question.QuestionType.Type)
+        {
+            case ResponseType.SingleSelect:
+                _isTypeSingleSelect = true;
+                break;
+            case ResponseType.MultiSelect:
+                _isTypeMultiSelect = true;
+                break;
+            case ResponseType.Text:
+                _isTypeText = true;
+                break;
+            case ResponseType.Number:
+                _isTypeNumber = true;
+                break;
+        }
+
+        switch (Question.QuestionType.DisplayType)
+        {
+            case ResponseDisplayType.CB:
+                _isDisplayTypeCheckbox = true;
+                break;
+            case ResponseDisplayType.RB:
+                _isDisplayTypeRadio = true;
+                break;
+            case ResponseDisplayType.DL:
+                _isDisplayTypeDropdown = true;
+                break;
+            case ResponseDisplayType.Text:
+                _isDisplayTypeText = true;
+                break;
+        }
+
+        Answer = new Answer();
+
+
+    }
+
+    private void OnSelectOption(AnswerOption selectedOption)
+    {
+        var id = selectedOption.Id;
+
+        Answer.Question = Question;
+        Answer.AnswerOptionSelected = selectedOption;
+
+        SupportRequest.Answers.Add(Answer);
+
+    }
+    ////MouseEventArgs e,
+    //private void OnCheckedChange( AnswerOption selectedOption)
+    //{
+    //    var id = selectedOption.Id;
+
+    //    Answer.Question = Question;
+    //    Answer.AnswerOptionsSelected.Add(selectedOption);
+
+    //    SupportRequest.Answers.Add(Answer);
+    //}
+
+}

@@ -32,6 +32,9 @@ public partial class CreatePage
         //Get all support types
         SupportTypes = await _supportTypeService.GetAll();
 
+        //initialize support request
+        _model.Answers = new List<Answer>();
+
         _isLoading = false;
     }
 
