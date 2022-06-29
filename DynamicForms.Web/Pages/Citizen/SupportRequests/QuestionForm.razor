@@ -17,7 +17,7 @@
     {
         @if (_isDisplayTypeRadio)
         {
-            <MudRadioGroup Disabled="ViewMode" T="AnswerOption" @bind-SelectedOption="_selectedOption">
+            <MudRadioGroup Disabled="ViewMode" T="AnswerOption" SelectedOption="_selectedOption" SelectedOptionChanged="(SelectedOption)=>SaveSelectedOption(SelectedOption)">
                 @foreach (var option in Question.AnswerOptions)
                 {
                     <MudRadio Option="@option" Color="Color.Primary" Disabled="ViewMode">@option.OptionLabel</MudRadio>
@@ -27,7 +27,7 @@
 
         @if (_isDisplayTypeDropdown)
         {
-            <MudSelect Disabled="ViewMode" T="AnswerOption" @bind-Value="_selectedOption" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Select option" >
+            <MudSelect Disabled="ViewMode" T="AnswerOption" @bind-Value="_selectedOption" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Select option" SelectedValuesChanged="SaveSelectedOption">
                 @foreach (AnswerOption option in Question.AnswerOptions)
                 {
                     <MudSelectItem Value="option">@option.OptionLabel</MudSelectItem>
@@ -95,7 +95,7 @@
     [Parameter] public SupportRequest SupportRequest { get; set; }
     [Parameter] public bool ViewMode { get; set; }
 
-    public Answer Answer { get; set; }
+    private Answer Answer { get; set; }
     private AnswerOption _selectedOption;
 
     private bool _isTypeSingleSelect;
@@ -156,13 +156,13 @@
             }
             if (_selectedOption != null)
             {
-                Answer.AnswerOptionSelected = _selectedOption;
+                SaveSelectedOption();
                 _selectedOption = null;
             }
 
         }
 
-        
+
 
 
     }
@@ -175,6 +175,19 @@
 
         SupportRequest.Answers.Add(Answer);
 
+    }
+
+    private void SaveSelectedOption(AnswerOption option)
+    {
+        _selectedOption = option;
+        SaveSelectedOption();
+    }
+    
+    private void SaveSelectedOption()
+    {
+        SupportRequest.Answers?.Remove(Answer);
+        Answer.AnswerOptionSelected = _selectedOption;
+        SupportRequest.Answers?.Add(Answer);
     }
     ////MouseEventArgs e,
     //private void OnCheckedChange( AnswerOption selectedOption)

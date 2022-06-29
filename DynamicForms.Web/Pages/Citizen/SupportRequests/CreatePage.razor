@@ -13,7 +13,7 @@
     {
         <MudBreadcrumbs Class="ml-n3" Items="_breadcrumbs" Separator="@BreadcrumbConstants.Separator" />
 
-        <MudText Class="my-4" Typo="Typo.h4">Support Request Details</MudText>
+        <MudText Class="my-4" Typo="Typo.h4">Create Support Request</MudText>
 
         <EditForm Model="_model" OnValidSubmit="OnValidSubmit">
             @*<FluentValidationValidator />*@
@@ -44,7 +44,7 @@
 
                             <!--*****************-->
                             <MudItem xs="12" md="12">
-                                <QuestionForm SupportRequest="_model" Question=question></QuestionForm>
+                                <QuestionForm SupportRequest="_model" Question=question ViewMode="false"></QuestionForm>
                             </MudItem>
 
                             <!--*****************-->
