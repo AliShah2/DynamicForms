@@ -31,6 +31,7 @@ builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(SupportCaseTypeProfil
 
 builder.Services.AddScoped<ISupportTypeService, SupportTypeService>();
 builder.Services.AddScoped<ISupportRequestService, SupportRequestService>();
+builder.Services.AddScoped<ISupportProvisionService, SupportProvisionService>();
 
 var app = builder.Build();
 

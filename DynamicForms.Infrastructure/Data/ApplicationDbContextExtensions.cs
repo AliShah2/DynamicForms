@@ -34,6 +34,9 @@ public static class ApplicationDbContextExtensions
         //SeedSupportRequests(dbContext);
         //dbContext.SaveChanges();
 
+        //SeedSupportProvisions(dbContext);
+        //dbContext.SaveChanges();
+
         //SeedAnswerOptions(dbContext);
         //dbContext.SaveChanges();
 
