@@ -1,4 +1,4 @@
-﻿@page "/citizen/support-requests/create"
+﻿@page "/citizen/support-requests/{SupportRequestId:int}/details"
 
 @using DynamicForms.Core.Entities
 @using DynamicForms.Core.Enums
@@ -22,10 +22,10 @@
                     <MudField Variant="Variant.Text">Reference Number</MudField>
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudTextField @bind-Value="_model.ReferenceNumber" For="@(() => _model.ReferenceNumber)" />
+                    <MudTextField Disabled="!_editMode" @bind-Value="_model.ReferenceNumber" For="@(() => _model.ReferenceNumber)" />
                 </MudItem>
                 <MudItem xs="12" sm="2">
-                    <MudSelect T="SupportType" @bind-Value="_model.SupportType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Support Type">
+                    <MudSelect Disabled="!_editMode" T="SupportType" @bind-Value="_model.SupportType" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Support Type">
                         @foreach (SupportType supportType in SupportTypes)
                         {
                             <MudSelectItem Value="@supportType">@supportType.Name</MudSelectItem>
@@ -44,7 +44,7 @@
 
                             <!--*****************-->
                             <MudItem xs="12" md="12">
-                                <QuestionForm SupportRequest="_model" Question=question></QuestionForm>
+                                <QuestionForm SupportRequest="_model" Question=question ViewMode="true"></QuestionForm>
                             </MudItem>
 
                             <!--*****************-->

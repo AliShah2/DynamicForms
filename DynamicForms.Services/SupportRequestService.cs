@@ -21,11 +21,12 @@ public class SupportRequestService : ISupportRequestService
     }
 
 
-    public Task<List<SupportRequest>> GetAllAsync()
+    public async Task<List<SupportRequest>> GetAllAsync()
     {
-        return _context.SupportRequests
+        return await _context.SupportRequests
             .Include(s=>s.SupportType)
             .Include(s => s.SupportType).ThenInclude(st=>st.Questions)
+            .Include(s=>s.Answers)
             .ToListAsync();
     }
 
@@ -33,5 +34,10 @@ public class SupportRequestService : ISupportRequestService
     {
         await _context.SupportRequests.AddAsync(supportRequest);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<SupportRequest> GetByIdAsync(int supportRequestId)
+    {
+        return await _context.SupportRequests.FirstOrDefaultAsync(s=>s.Id == supportRequestId);
     }
 }

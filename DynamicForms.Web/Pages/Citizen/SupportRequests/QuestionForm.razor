@@ -9,7 +9,7 @@
     {
         @if (_isDisplayTypeText)
         {
-            <MudTextField @bind-Value="Answer.TextResponse" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField Disabled="ViewMode" @bind-Value="Answer.TextResponse" Variant="Variant.Outlined"></MudTextField>
         }
     }
 
@@ -17,17 +17,17 @@
     {
         @if (_isDisplayTypeRadio)
         {
-            <MudRadioGroup T="AnswerOption" SelectedOptionChanged="OnSelectOption">
+            <MudRadioGroup Disabled="ViewMode" T="AnswerOption" @bind-SelectedOption="_selectedOption">
                 @foreach (var option in Question.AnswerOptions)
                 {
-                    <MudRadio Option="@option" Color="Color.Primary">@option.OptionLabel</MudRadio>
+                    <MudRadio Option="@option" Color="Color.Primary" Disabled="ViewMode">@option.OptionLabel</MudRadio>
                 }
             </MudRadioGroup>
         }
 
         @if (_isDisplayTypeDropdown)
         {
-            <MudSelect T="AnswerOption" ValueChanged="OnSelectOption" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Select option" >
+            <MudSelect Disabled="ViewMode" T="AnswerOption" @bind-Value="_selectedOption" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Label="Select option" >
                 @foreach (AnswerOption option in Question.AnswerOptions)
                 {
                     <MudSelectItem Value="option">@option.OptionLabel</MudSelectItem>
@@ -93,6 +93,7 @@
 @code {
     [Parameter] public Question Question { get; set; }
     [Parameter] public SupportRequest SupportRequest { get; set; }
+    [Parameter] public bool ViewMode { get; set; }
 
     public Answer Answer { get; set; }
     private AnswerOption _selectedOption;
@@ -141,7 +142,27 @@
                 break;
         }
 
-        Answer = new Answer();
+        if(ViewMode)
+        {
+            Answer = SupportRequest.Answers.FirstOrDefault(a => a.Question.Id == Question.Id);
+            _selectedOption = Answer.AnswerOptionSelected;
+        }
+        else
+        {
+            if (Answer == null)
+            {
+                Answer = new Answer();
+                Answer.Question = Question;
+            }
+            if (_selectedOption != null)
+            {
+                Answer.AnswerOptionSelected = _selectedOption;
+                _selectedOption = null;
+            }
+
+        }
+
+        
 
 
     }
@@ -150,7 +171,6 @@
     {
         var id = selectedOption.Id;
 
-        Answer.Question = Question;
         Answer.AnswerOptionSelected = selectedOption;
 
         SupportRequest.Answers.Add(Answer);
