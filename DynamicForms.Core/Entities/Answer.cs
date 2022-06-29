@@ -13,7 +13,7 @@ public class Answer
     public SupportRequest? SupportRequest { get; set; }
     public SupportProvision? SupportProvision { get; set; }
     public string? TextResponse { get; set; }
-    public AnswerOption? AnswerOption { get; set; }
-    public bool? OptionSelected { get; set; }
+    public AnswerOption? AnswerOptionSelected { get; set; }
+    //CHANGE TO THIS TO SUPPORT MULTIPLE OPTIONS SELECTEDpublic ICollection<AnswerOption>? AnswerOptionsSelected { get; set; }
 
 }

@@ -30,6 +30,7 @@ builder.Services.AddMudServices();
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(SupportCaseTypeProfile)));
 
 builder.Services.AddScoped<ISupportTypeService, SupportTypeService>();
+builder.Services.AddScoped<ISupportRequestService, SupportRequestService>();
 
 var app = builder.Build();
 

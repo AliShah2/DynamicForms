@@ -23,5 +23,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<AreaCoverage> AreaCoverages { get; set; }
     public DbSet<AnswerOption> AnswerOptions { get; set; }
     public DbSet<Answer> Answers { get; set; }
-    public DbSet<SupportRequest> supportRequests { get; set; }
+    public DbSet<SupportRequest> SupportRequests { get; set; }
 }
