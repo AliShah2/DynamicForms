@@ -10,6 +10,7 @@ namespace DynamicForms.Services.Interfaces;
 public interface ISupportRequestService
 {
     Task<List<SupportRequest>> GetAllAsync();
+    Task<SupportRequest> GetByIdAsync(int supportRequestId);
     //Task<List<SupportCaseType>> GetAllSupportCasesTypes();
     //Task<List<AreaCoverage>> GetAllAreaCoverageTypes();
     //Task<List<QuestionType>> GetAllQuestionTypes();
