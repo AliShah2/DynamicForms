@@ -42,10 +42,12 @@
                         @foreach (Question question in _model.SupportType.Questions)
                         {
 
-                            <!--*****************-->
-                            <MudItem xs="12" md="12">
-                                <QuestionForm SupportRequest="_model" Question=question ViewMode="true"></QuestionForm>
-                            </MudItem>
+                            @if (question.StakeholderType == StakeholderType.Requester)
+                            {
+                                <MudItem xs="12" md="12">
+                                    <QuestionForm SupportRequest="_model" Question=question ViewMode="true"></QuestionForm>
+                                </MudItem>
+                            }
 
                             <!--*****************-->
 

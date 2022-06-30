@@ -11,4 +11,5 @@ public class SupportProvision
     public int Id { get; set; }
     public string ReferenceNumber { get; set; }
     public SupportType SupportType { get; set; }
+    public ICollection<Answer>? Answers { get; set; }
 }

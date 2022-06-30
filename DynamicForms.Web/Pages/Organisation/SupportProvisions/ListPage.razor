@@ -1,0 +1,65 @@
+﻿@page "/organisation/support-provisions"
+
+@using DynamicForms.Web.Constants
+
+@if (_isLoading)
+{
+    <MudProgressLinear Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+}
+else
+{
+    <MudContainer>
+        <MudBreadcrumbs Class="ml-n3" Items="_breadcrumbs" Separator="@BreadcrumbConstants.Separator" />
+
+        <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+            <MudText Typo="Typo.h4">Support Provisions</MudText>
+        </MudHidden>
+        <MudTable Items="SupportProvisions"
+              Loading="@_isLoading"
+              LoadingProgressColor="Color.Info"
+              Filter="SearchTable"
+              Hover="true">
+            <ToolBarContent>
+                <MudHidden Breakpoint="Breakpoint.Xs">
+                    <MudText Typo="Typo.h4">Support Provisions</MudText>
+                    <MudSpacer />
+                </MudHidden>
+                <MudTextField @bind-Value="_searchString"
+                          Placeholder="Search"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium"
+                          Class="mt-0">
+                </MudTextField>
+                <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Filled.AddCircle"
+                       Class="px- mr-2"                       
+                       OnClick="RedirectToCreatePage">
+                    Create
+                </MudButton>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>Reference Number</MudTh>
+                <MudTh>Support Type</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Reference Number">@context.ReferenceNumber</MudTd>
+                <MudTd DataLabel="Support Type">@context.SupportType.Name</MudTd>
+                <MudTd>
+                    <MudGrid Justify="Justify.Center">
+                        <MudItem>
+                            <MudTooltip Text="Edit" Placement="Placement.Top">
+                                <MudFab Color="Color.Info"
+                                    Icon="@Icons.Material.Filled.Edit"
+                                    Size="Size.Small"
+                                    OnClick="() => RedirectToEditPage(context.Id)">
+                                </MudFab>
+                            </MudTooltip>
+                        </MudItem>
+                    </MudGrid>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudContainer>
+}
